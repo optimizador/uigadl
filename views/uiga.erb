@@ -1,0 +1,114 @@
+<%def money(num)
+  "$#{num.gsub(/\d(?=(...)+$)/, '\0,')}"
+end
+%>
+<p>Vamos a dimensionar el Gateway Appliance, llena los parámetros de configuración</p>
+
+<p>
+<form action="/regresar" method="get">
+<button type="submit"> <-- Regresar </button>
+</form>
+</p>
+<p style="font-style: italic;">
+NOTAS:<br>
+*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%<br>
+**Para procesos de special bid es requerido obtener los precios lista desde cloud.ibm.com<br>
+</p>
+
+<form action="/uigarespuesta" method="get">
+
+<table style="width:100%" align="left">
+  <tr>
+    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Gateway Appliance</th>
+  </tr>
+  <tr>
+    <td>
+        <!-- tabla parametros del gateway -->
+        <table style="width:100%" align="left">
+          <tr>
+            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
+            <th bgcolor="#00008B" style="color: white;">Valor</th>
+          </tr>
+          <tr>
+            <td>Región</td>
+            <td>
+                <select name="region" id="region">
+                  <option value="mexico">México</option>
+                  <option value="dal13">Dallas 13</option>
+                </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Tipo de Gateway</td>
+            <td>
+              <select name="type" id="type">
+                <option value="vyatta">Vyatta</option>
+                <option value="juniper">Juniper</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Interfase de Red</td>
+            <td>
+              <select name="interfase" id="interfase">
+                <option value="1">1 Gbps</option>
+                <option value="10">10 Gbps</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Manejo de información sensible<br>
+            <i><small>Vyatta no dispone de módulo IPS</small></i></td>
+            <td>
+              <input type="hidden" name="pii" value=false />
+              <input type="checkbox" name="pii" id="pii" value=true>Si<br>
+              </td>
+          </tr>
+          <tr>
+            <td>Requiere Alta Disponibilidad</td>
+            <td>
+              <input type="hidden" name="ha" value=false />
+              <input type="checkbox" name="ha" id="ha" value=true>Si<br>
+              </td>
+          </tr>
+        </table>
+    </td>
+  </tr>
+</table>
+
+<p>
+<button type="submit">Quiero mi dimensionamiento</button>
+</p>
+
+
+
+</form>
+
+<!--%=respuestasizing%-->
+<% if (respuestasizing != nil ) then%>
+<h3>Dimensionamiento Gateway Appliance</h3>
+  <table  style="width:100%" align="left">
+    <thead>
+      <tr>
+        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD)</th>
+        <th bgcolor="#00008B" style="color: white;">Región</th>
+        <th bgcolor="#00008B" style="color: white;">Tipo de Gateway</th>
+        <th bgcolor="#00008B" style="color: white;">Manejo información sensible</th>
+        <th bgcolor="#00008B" style="color: white;">Nodos </th>
+        <th bgcolor="#00008B" style="color: white;">Descripción </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% respuestasizing.each do |json| %>
+        <tr>
+          <td>$<%= json["precio"].to_s %> USD</td>
+          <td><%= json["region"].to_s %></td>
+          <td><%= json["type"].to_s %></td>
+          <td><%= json["pii"].to_s %></td>
+          <td><%= json["nodos"].to_i %></td>
+          <td><%= json["description"].to_s %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
