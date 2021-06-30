@@ -51,16 +51,12 @@ get '/uiga' do
   respuestastorage=[]
     erb :uiga , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestastorage => respuestastorage}
 end
-get '/regresar' do
-  redirect "https://ui.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
-  #redirect "http://localhost:4567"
-end
 get '/uigarespuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de CP4D: CPU: #{params[:cpu]} RAM: #{params[:ram]} Storage: #{params[:storage]} IOPS #{params[:iops]}")
   @name = "GatewayAppliance Dimensionamiento"
-  #urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
-  urlapi="http://localhost:8080"
+  urlapi="https://apis-ga.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
+  #urlapi="http://localhost:8080"
   region="#{params['region']}"
   type="#{params['type']}"
   interfase="#{params['interfase']}"
