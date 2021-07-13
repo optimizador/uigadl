@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'rest-client'
 
+set :bind, '0.0.0.0'
+set :port, 9090
 set(:cookie_options) do
   { :expires => Time.now + 30*60 }
 end
@@ -118,4 +120,32 @@ get '/uigarespuesta' do
   logger.info(respuestasizing)
   #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
   erb :uiga , :locals => {:respuestasizing => respuestasizing}
+end
+get '/uidl' do
+  logger = Logger.new(STDOUT)
+  logger.info("Selecciono dimensionamiento para Direct Link")
+  @name = "DirectLink"
+  respuestasizing=[]
+  respuestasizingalt=[]
+  respuestastorage=[]
+    erb :uidl , :locals => {:respuestasizing => respuestasizing}
+end
+get '/uidlrespuesta' do
+  logger = Logger.new(STDOUT)
+  logger.info("Recibiendo parametros para dimensionamiento de DirectLink: region: #{params[:region]} type: #{params[:type]} country offer: #{params[:country_offer]} puerto #{params[:puerto]} routing #{params[:routing]} ha #{params[:ha]}")
+  @name = "DirectLink Dimensionamiento"
+  #urlapi="https://apis-ga.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
+  urlapi="http://localhost:8080"
+  region="#{params['region']}"
+  type="#{params['type']}"
+  country_offer="#{params['country_offer']}"
+  puerto="#{params['puerto']}"
+  routing="#{params['routing']}"
+  ha="#{params['ha']}"
+  #parametros recibidos
+  respuestasizing = RestClient.get "#{urlapi}/api/v1/sizingdl?region=#{region}&type=#{type}&country_offer=#{country_offer}&puerto=#{puerto}&routing=#{routing}&ha=#{ha}", {:params => {}}
+  respuestasizing=JSON.parse(respuestasizing.to_s)
+  logger.info(respuestasizing)
+  #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
+  erb :uidl , :locals => {:respuestasizing => respuestasizing}
 end

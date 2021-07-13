@@ -1,0 +1,146 @@
+<%def money(num)
+  "$#{num.gsub(/\d(?=(...)+$)/, '\0,')}"
+end
+%>
+<p>Vamos a dimensionar Direct Link, llena los parámetros de configuración</p>
+
+<p>
+<form action="/regresar" method="get">
+<button type="submit"> <-- Regresar </button>
+</form>
+</p>
+<p style="font-style: italic;">
+NOTAS:<br>
+*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%<br>
+**Para procesos de special bid es requerido obtener los precios lista desde cloud.ibm.com<br>
+</p>
+
+<form action="/uidlrespuesta" method="get">
+
+<table style="width:100%" align="left">
+  <tr>
+    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Direct Link</th>
+  </tr>
+
+  <tr>
+    <td>
+      NOTAS en el llenado de parámetros:<br>
+      1. Direct Link Dedicated es soportado con puertos 1,2,5y10Gbps en México y Dallas MZR<br>
+      2. Direct link v2.0 es soportado con puertos desde 50Mbps hasta 5Gbps en Dallas MZR<br>
+      2. Direct link Connect on Classic es soportado con puertos desde 50Mbps hasta 5Gbps en México y Dallas 3 y 4<br>
+      2. Direct link Exchange es soportado con puertos desde 50Mbps hasta 5Gbps en Dallas 3 y 13<br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <!-- tabla parametros del gateway -->
+        <table style="width:100%" align="left">
+          <tr>
+            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
+            <th bgcolor="#00008B" style="color: white;">Valor</th>
+          </tr>
+          <tr>
+            <td>Región</td>
+            <td>
+                <select name="region" id="region">
+                  <option value="mexico">México</option>
+                  <option value="dallas">Dallas MZR</option>
+                  <option value="dal3y4">Dallas 3 y 4</option>
+                  <option value="dal3y13">Dallas 3 y 13</option>
+                </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Tipo</td>
+            <td>
+              <select name="type" id="type">
+                <option value="eclassic">Exchange on Classic</option>
+                <option value="cclassic">Connect on classic</option>
+                <option value="dclassic">Dedicated on classic</option>
+                <option value="dv2unmet">Dedicated v2.0 unmetered</option>
+                <option value="dv2met">Dedicated v2.0 metered</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Puerto</td>
+            <td>
+              <select name="puerto" id="puerto">
+                <option value="50mbps">50 Mbps</option>
+                <option value="100mbps">100 Mbps</option>
+                <option value="200mbps">200 Mbps</option>
+                <option value="500mbps">500 Mbps</option>
+                <option value="1gbps">1 Gbps</option>
+                <option value="2gbps">2 Gbps</option>
+                <option value="5gbps">5 Gbps</option>
+                <option value="10gbps">10 Gbps</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Routing</td>
+            <td>
+              <select name="routing" id="routing">
+                <option value="local">Local</option>
+                <option value="global">Global</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Requiere Alta Disponibilidad</td>
+            <td>
+              <input type="hidden" name="ha" value=false />
+              <input type="checkbox" name="ha" id="ha" value=true>Si<br>
+              </td>
+          </tr>
+          <tr>
+            <td>País Oferta</td>
+            <td>
+              <select name="country_offer" id="country_offer">
+                <option value="mexico">México</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+    </td>
+  </tr>
+</table>
+
+<p>
+<button type="submit">Quiero mi dimensionamiento</button>
+</p>
+
+
+
+</form>
+
+<!--%=respuestasizing%-->
+<% if (respuestasizing != nil ) then%>
+<h3>Dimensionamiento Direct Link</h3>
+  <table  style="width:100%" align="left">
+    <thead>
+      <tr>
+        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD)</th>
+        <th bgcolor="#00008B" style="color: white;">Región</th>
+        <th bgcolor="#00008B" style="color: white;">Tipo</th>
+        <th bgcolor="#00008B" style="color: white;">Puerto</th>
+        <th bgcolor="#00008B" style="color: white;">Nodos </th>
+        <th bgcolor="#00008B" style="color: white;">Routing </th>
+        <th bgcolor="#00008B" style="color: white;">País Offerta </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% respuestasizing.each do |json| %>
+        <tr>
+          <td>$<%= json["precio"].to_s %> USD</td>
+          <td><%= json["region"].to_s %></td>
+          <td><%= json["type"].to_s %></td>
+          <td><%= json["puerto"].to_s %></td>
+          <td><%= json["nodos"].to_i %></td>
+          <td><%= json["routing"].to_s %></td>
+          <td><%= json["country_offer"].to_s %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
