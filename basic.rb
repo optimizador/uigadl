@@ -2,7 +2,7 @@ require 'sinatra'
 require 'rest-client'
 
 set :bind, '0.0.0.0'
-set :port, 9090
+set :port, 4567
 set(:cookie_options) do
   { :expires => Time.now + 30*60 }
 end
