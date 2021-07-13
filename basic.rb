@@ -134,8 +134,8 @@ get '/uidlrespuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de DirectLink: region: #{params[:region]} type: #{params[:type]} country offer: #{params[:country_offer]} puerto #{params[:puerto]} routing #{params[:routing]} ha #{params[:ha]}")
   @name = "DirectLink Dimensionamiento"
-  #urlapi="https://apis-ga.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
-  urlapi="http://localhost:8080"
+  urlapi="https://apis-ga.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
+  #urlapi="http://localhost:8080"
   region="#{params['region']}"
   type="#{params['type']}"
   country_offer="#{params['country_offer']}"
